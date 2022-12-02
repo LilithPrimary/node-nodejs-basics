@@ -1,7 +1,13 @@
 const parseArgs = () => {
-  const prefix = 'RSS_';
-  const port = process.env;
-  console.log(Object.keys(port).filter((key) => key.includes(prefix)));
+  const args = process.argv.slice(2);
+
+  console.log(
+    args
+      .map((el) =>
+        el.startsWith('--') ? `${el.replace('--', '')} is` : `${el},`
+      )
+      .join(' ')
+  );
 };
 
 parseArgs();
