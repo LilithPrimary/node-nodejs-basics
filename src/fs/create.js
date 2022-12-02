@@ -5,19 +5,19 @@ import { appendFile, access } from 'fs/promises';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const create = async () => {
-  const err = Error('FS operation failed');
   const dir = join(__dirname, 'files', 'fresh.txt');
-  access(dir)
-    .then(() => {
-      console.log('error');
+  const error = Error('FS operation failed');
+
+  try {
+    await access(dir);
+    throw error;
+  } catch (err) {
+    if (err === error) {
       throw err;
-    })
-    .catch((error) => {
-      if (error === err) {
-        throw err;
-      }
-      appendFile(dir, 'I am fresh and young');
-    });
+    }
+
+    appendFile(dir, 'I am fresh and young');
+  }
 };
 
 await create();
