@@ -12,13 +12,17 @@ const copying = async (curDir, targDir, error) => {
   const files = await readdir(curDir, { withFileTypes: true });
 
   await Promise.all(
-    files.map((file) => {
-      const current = join(curDir, file.name);
-      const target = join(targDir, file.name);
-      return file.isFile()
-        ? copyFile(current, target)
-        : copying(current, target, error);
-    })
+    files
+      .map((file) => {
+        const current = join(curDir, file.name);
+        const target = join(targDir, file.name);
+        return file.isFile()
+          ? copyFile(current, target)
+          : copying(current, target, error);
+      })
+      .catch((err) => {
+        throw Error('copy error');
+      })
   );
 };
 
